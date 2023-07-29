@@ -1,0 +1,147 @@
+:root {
+    --primary: #4ec9b0;
+    --primary-string: "#4ec9b0";
+    --primary-05: #4ec9b005;
+    --primary-10: #4ec9b010;
+    --primary-15: #4ec9b015;
+    --primary-20: #4ec9b020;
+    --primary-30: #4ec9b030;
+    --primary-50: #4ec9b050;
+    --primary-variant: #46b59e;
+
+    --accent: #c586c0;
+    --accent-string: "#c586c0";
+    --accent-05: #c586c005;
+    --accent-10: #c586c010;
+    --accent-15: #c586c015;
+    --accent-20: #c586c020;
+    --accent-30: #c586c030;
+    --accent-50: #c586c050;
+    --accent-variant: #b179ad;
+
+    --secondary: #569cd6;
+    --secondary-string: "#569cd6";
+    --secondary-05: #569cd605;
+    --secondary-10: #569cd610;
+    --secondary-15: #569cd615;
+    --secondary-20: #569cd620;
+    --secondary-30: #569cd630;
+    --secondary-50: #569cd650;
+    --secondary-variant: #4d8cc1;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+
+    width: 100vw;
+    height: 100vh;
+
+    padding: 36px;
+    margin: 0px;
+
+    background-color: #221d29;
+    color: #4ec9b0;
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        Liberation Mono, 'Courier New', monospace;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+    flex: 1;
+}
+
+.grid .cell {
+    display: grid;
+    place-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: var(--primary-30);
+    color: var(--primary);
+}
+
+.cell.selected {
+    background-color: var(--accent-30);
+    color: var(--accent);
+}
+
+/* Readouts */
+
+.readout .selected {
+    margin-top: var(--line-height);
+    min-height: 57px;
+    background-color: var(--primary-10);
+    overflow: overlay;
+    padding: 12px;
+    display: grid;
+    /* grid-auto-flow: column; */
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 5px;
+    flex: 1;
+}
+
+.readout .selected .order-line {
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.readout .selected .order-line.placeholder {
+    color: transparent;
+}
+
+.readout .selected .order-line span:first-child {
+    font-weight: 600;
+}
+
+.readout .heading {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.readout div {
+    font-size: 16px;
+}
+
+/* FPS */
+.stats {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    background-color: var(--secondary-30);
+    color: var(--secondary);
+    padding: 5px 10px;
+    min-width: 15ch;
+    font-size: 12px;
+}
+
+.stats div span:first-child {
+    font-weight: 600;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 24px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background-color: var(--primary-30);
+    color: var(--primary);
+    padding: 6px 12px;
+}
