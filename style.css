@@ -4,90 +4,85 @@
 }
 
 :root {
-    --primary: #4ec9b0;
-    --primary-string: "#4ec9b0";
-    --primary-05: #4ec9b005;
-    --primary-10: #4ec9b010;
-    --primary-15: #4ec9b015;
-    --primary-20: #4ec9b020;
-    --primary-30: #4ec9b030;
-    --primary-50: #4ec9b050;
-    --primary-variant: #46b59e;
-
-    --accent: #c586c0;
-    --accent-string: "#c586c0";
-    --accent-05: #c586c005;
-    --accent-10: #c586c010;
-    --accent-15: #c586c015;
-    --accent-20: #c586c020;
-    --accent-30: #c586c030;
-    --accent-50: #c586c050;
-    --accent-variant: #b179ad;
-
-    --secondary: #569cd6;
-    --secondary-string: "#569cd6";
-    --secondary-05: #569cd605;
-    --secondary-10: #569cd610;
-    --secondary-15: #569cd615;
-    --secondary-20: #569cd620;
-    --secondary-30: #569cd630;
-    --secondary-50: #569cd650;
-    --secondary-variant: #4d8cc1;
-
-    --muted: #83769c;
+    --background-color: #221d29;
+    --color: #d4d4d4;
+    --muted: #878787;
+    --primary: #28fc91;
+    --primary-10: #28fc9110;
+    --primary-30: #28fc9130;
+    --primary-50: #28fc9150;
+    --accent: #40ffff;
+    --accent-05: #40ffff05;
+    --accent-10: #40ffff10;
+    --accent-30: #40ffff30;
+    --accent-50: #40ffff50;
+    --line-height: 18px;
+    --font-size: 6px;
+    --font-family: 'PICO-8';
+    --border-radius: 6px;
+    --border-color: var(--primary-30);
 }
 
 * {
     box-sizing: border-box;
-    font-size: 10px;
-    font-family: 'PICO-8', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        Liberation Mono, 'Courier New', monospace;
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+}
+
+html {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--color);
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 4ch;
+}
+
+.grid-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 2ch;
-    /* width: 100vw; */
-    /* height: 100vh; */
-    padding: 3ch;
-    margin: 0px;
-    background-color: #221d29;
-    color: #4ec9b0;
-    font-family: 'PICO-8', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        Liberation Mono, 'Courier New', monospace;
+    gap: var(--line-height);
+    position: relative;
 }
 
-/* Grid */
-.grid {
+.grid-wrapper .grid {
+    --cols: 10;
+    --rows: 4;
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: .75ch;
-    flex: 1;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+    gap: 1ch;
+    aspect-ratio: calc(var(--cols) / var(--rows));
 }
 
-.grid .cell {
+.grid-wrapper .grid .cell {
     display: grid;
     place-content: center;
     font-weight: 600;
     background-color: var(--primary-30);
     color: var(--primary);
-    padding: .5ch;
+    border-radius: var(--border-radius);
 }
 
-.cell.selected {
+.grid-wrapper .cell.selected {
     background-color: var(--accent-30);
     color: var(--accent);
 }
 
-/* Order selected */
-.readout .selected {
-    margin-top: var(--line-height);
+.grid-wrapper .readout .heading {
+    margin-bottom: var(--line-height);
+}
+
+
+.grid-wrapper .readout .selected {
+    position: relative;
     min-height: 57px;
-    background-color: var(--primary-10);
     overflow: overlay;
-    padding: 1ch;
+    padding: var(--line-height);
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: repeat(4, 1fr);
@@ -96,74 +91,188 @@ body {
     flex: 1;
 }
 
-.readout .selected .order-line {
+.grid-wrapper .readout .selected .order-line {
     display: flex;
     justify-content: center;
 }
 
-.readout .selected .order-line.placeholder {
+.grid-wrapper .readout .selected .order-line.placeholder {
     color: transparent;
 }
 
-.readout .selected .order-line span:first-child {
+.grid-wrapper .readout .selected .order-line span:first-child {
     color: var(--muted);
 }
 
-.readout .heading {
-    text-align: center;
-    margin-bottom: 1ch;
-    color: var(--muted);
+.grid-wrapper .readout .selected .order-line span:nth-child(2) {
+    color: var(--primary);
 }
 
-/* Stats */
-.stats {
+.grid-wrapper .stats-ctr {
     display: flex;
+    justify-content: flex-end;
+}
+
+.grid-wrapper .stats-ctr .stats {
     flex-direction: column;
-    gap: .25ch;
-    position: fixed;
-    top: .25ch;
-    right: .25ch;
-    background-color: #2c3549;
-    color: var(--secondary);
-    padding: .5ch;
+    background-color: var(--accent-30);
+    color: var(--accent);
+    padding: 1ch 2ch;
     min-width: 15ch;
     white-space: nowrap;
+    border-radius: var(--border-radius);
 }
 
-.stats>div {
+.grid-wrapper .stats-ctr .stats>div {
     display: flex;
     justify-content: space-between;
 }
 
-.stats .counter {
+.grid-wrapper .stats-ctr .stats .counter {
     text-align: right;
 }
 
-/* Toolbar */
-.toolbar {
+.grid-wrapper .toolbar {
     display: flex;
     justify-content: center;
     width: 100%;
-    gap: 24px;
+    gap: 2ch;
+    margin: var(--line-height) 0px;
 }
 
-button {
+.grid-wrapper .toolbar .btn {
+    font-family: var(--font-family);
     cursor: pointer;
     border: none;
-    background-color: var(--primary-30);
     color: var(--primary);
-    padding: .5ch;
+    padding: 0.5ch 2ch;
     text-align: center;
+    background-color: var(--primary-30);
+    border-radius: var(--border-radius);
 }
 
-@media screen and (max-width: 500px) {
-    body {
-        padding: 6ch .5ch;
-    }
+.grid-wrapper .toolbar .btn:global(.stop) {
+    color: var(--accent);
+    background-color: var(--accent-30);
+}
 
-    .grid {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(10, 1fr);
-        gap: .5ch;
-    }
+.grid-wrapper .toolbar .btn:global(.reset) {
+    color: var(--accent);
+    background-color: var(--accent-30);
+}
+
+/* Box */
+.box {
+    --box-color: var(--border-color);
+    --circle-color: var(--background-color);
+    --radius-size: 6px;
+    --top-radius: 0px 0px var(--radius-size) var(--radius-size);
+    --bottom-radius: var(--radius-size) var(--radius-size) 0px 0px;
+    --corner-size: 3px;
+
+    width: 100%;
+    background-color: var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 8px;
+
+}
+
+.box .border {
+    position: relative;
+    border-radius: calc(8px - var(--border-radius));
+    background-color: var(--background-color);
+    margin: 0;
+}
+
+.box .top,
+.box .bottom {
+    pointer-events: none;
+    position: absolute;
+    left: 25%;
+    height: calc(var(--corner-size) * 3);
+    height: 9px;
+    width: 50%;
+    background-color: var(--border-color);
+}
+
+.box .top:after,
+.box .top:before,
+.box .bottom:after,
+.box .bottom:before {
+    content: "";
+    position: absolute;
+    width: var(--corner-size);
+    height: var(--corner-size);
+    background-color: var(--box-color);
+    z-index: 1;
+}
+
+.box .top:after,
+.box .bottom:after {
+    left: calc(var(--corner-size) * -1);
+}
+
+.box .top:before,
+.box .bottom:before {
+    right: calc(var(--corner-size) * -1);
+}
+
+.box .top .circle,
+.box .bottom .circle {
+    height: 100%;
+    width: 100%;
+    border-radius: var(--top-radius);
+}
+
+.box .top .circle:after,
+.box .top .circle:before,
+.box .bottom .circle:after,
+.box .bottom .circle:before {
+    content: "";
+    position: absolute;
+    width: calc(var(--corner-size) * 2);
+    height: calc(var(--corner-size) * 2);
+    border-radius: var(--corner-size);
+    background: var(--circle-color);
+    z-index: 2;
+}
+
+.box .top .circle:after,
+.box .bottom .circle:after {
+    left: calc(var(--corner-size) * -2);
+}
+
+.box .top .circle:before,
+.box .bottom .circle:before {
+    right: calc(var(--corner-size) * -2);
+}
+
+.box .top {
+    top: 0px;
+    border-radius: var(--top-radius);
+}
+
+.box .top:after,
+.box .top:before {
+    top: 0px;
+}
+
+.box .top .circle:after,
+.box .top .circle:before {
+    top: 0px;
+}
+
+.box .bottom {
+    bottom: 0px;
+    border-radius: var(--bottom-radius);
+}
+
+.box .bottom:after,
+.box .bottom:before {
+    bottom: 0px;
+}
+
+.box .bottom .circle:after,
+.box .bottom .circle:before {
+    bottom: 0px;
 }

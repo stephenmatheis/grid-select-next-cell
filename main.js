@@ -1,8 +1,11 @@
 // State
 let t = 0;
 let seconds = 0;
-let enemeies = [...document.querySelectorAll(".cell")];
-let range = enemeies.slice(-10);
+let enemeies = [...document.querySelectorAll(".cell")].map((cell) => {
+    cell.mission = "protect";
+
+    return cell;
+});
 let selected = [];
 
 // Run at 30fps
@@ -20,66 +23,24 @@ function _update() {
     t += 1;
     document.querySelector(".fps").innerText = t;
 
+    // TODO: Add number field for user to set
     // Every second (30 frames)
     if (t % 30 === 0) {
         seconds += 1;
         document.querySelector(".seconds").innerText = seconds;
 
-        if (enemeies.length == 0) {
-            return;
-        }
+        const max_index = Math.min(9, enemeies.length);
+        const index = Math.floor(Math.random() * max_index) + 1;
+        const cell = enemeies.at(-index);
 
-        const row_len = 10;
+        console.log(`Selected #${cell} :`, cell);
+        console.log(`Mission?`, cell.mission);
 
-        const el = rnd_element(range);
-        const range_index = range.indexOf(el);
-        const enemies_index = enemeies.indexOf(el);
+        // Set el to attack
+        cell.mission = "attack";
 
-        const new_el = enemeies[enemies_index - row_len];
-
-        // NOTE: Don't remove the enemy
-        // It will be removed either by:
-        // 1. Player reduces the enemy's health to 0
-        // 2. The enemy leaves the screen
-        //
-        // This poses a problem. We don't know what the size
-        // of the array will be on any given frame.
-        // We'll have to check the size of the array on each
-        // pass to see what's there
-
-        enemeies.splice(enemies_index, 1);
-        range.splice(range_index, 1);
-
-        // if (new_el) {
-        //     range.splice(range_index, 1, new_el);
-        // } else {
-        //     range.splice(range_index, 1);
-        // }
-
-        // DEV: From SHMUP.P8
-        // local max_num = min(10, #enemies)
-		// local index = flr(rnd(max_num))
-		
-		// index = #enemies - index
-	
-		// local enemy = enemies[index]
-        // DEV:
-
-        console.log(
-            "Range:",
-            range.map((c) => c.innerText)
-        );
-        console.log("Selected:", el);
-        console.log("Range index:", range_index);
-        console.log(
-            "Enemies:",
-            enemeies.map((c) => c.innerText)
-        );
-        console.log("Enemies index:", enemies_index);
-        console.log("New enemy?", new_el);
-        console.log("----------------------------------------\n");
-
-        selected.push(el);
+        // Add to list of selected enemies
+        selected.push(cell);
 
         // Update order selected
         document.querySelector(".selected:not(.cell)").innerHTML = selected
@@ -87,19 +48,30 @@ function _update() {
                 const num = index + 1;
 
                 return /*html*/ `
-                        <div class="order-line">
-                            <span style="margin-right: ${
-                                num > 10 ? "1ch" : "2ch"
-                            }">${num}</span><span>${cell.innerText}</span>
-                        </div>
-                    `;
+                      <div class="order-line">
+                          <span style="margin-right: ${
+                              num > 10 ? "1ch" : "2ch"
+                          }">${num}</span><span>${cell.innerText}</span>
+                      </div>
+                  `;
             })
             .join("\n");
 
-        // Grab the next 10 items
-        if (range.length === 0) {
-            range = enemeies.slice(-10);
+        if (enemeies.length == 0) {
+            clearInterval(game_loop);
+            return;
         }
+    }
+
+    // TODO:
+    // Randomly select an enemy to be killed
+    // at a random frame
+    if (t % 30 === 0) {
+        const index = Math.floor(Math.random() * (enemeies.length - 1));
+
+        console.log(`#${index} killed.`);
+
+        enemeies.splice(index, 1);
     }
 }
 
@@ -119,22 +91,18 @@ function reset_state() {
     selected = [];
 }
 
-function rnd_element(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
-
 // start
-document.querySelector("button.start").addEventListener("click", () => {
+document.querySelector(".start").addEventListener("click", () => {
     game_loop = start_game();
 });
 
 // stop
-document.querySelector("button.stop").addEventListener("click", () => {
+document.querySelector(".stop").addEventListener("click", () => {
     clearInterval(game_loop);
 });
 
 // reset
-document.querySelector("button.reset").addEventListener("click", () => {
+document.querySelector(".reset").addEventListener("click", () => {
     clearInterval(game_loop);
 
     // set state back to initial values
@@ -154,6 +122,10 @@ document.querySelector("button.reset").addEventListener("click", () => {
     });
 
     document.querySelector(".selected:not(.cell)").innerHTML = /*html*/ `
-        <div class="order-line placeholder">None</div>
-    `;
+          <div
+              class="order-line placeholder"
+          >
+              None
+          </div>
+      `;
 });
